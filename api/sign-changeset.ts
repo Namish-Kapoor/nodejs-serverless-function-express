@@ -1,13 +1,11 @@
 import jwt from 'jsonwebtoken';
 import { v4 as uuidv4 } from 'uuid';
 
-const ALLOWED_ORIGIN = process.env.NODE_ENV === 'production' ? '*' : '*';
-
 export async function OPTIONS() {
   return new Response(null, {
     status: 200,
     headers: {
-      'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
+      'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type, Authorization',
       'Access-Control-Allow-Credentials': 'true',
@@ -24,7 +22,7 @@ export async function POST(req: Request) {
         { error: 'Server configuration error' },
         {
           status: 500,
-          headers: { 'Access-Control-Allow-Origin': ALLOWED_ORIGIN }
+          headers: { 'Access-Control-Allow-Origin': '*' }
         }
       );
     }
@@ -40,7 +38,7 @@ export async function POST(req: Request) {
     const token = jwt.sign(payload, process.env.SHOPIFY_API_SECRET);
 
     return Response.json({ token }, {
-      headers: { 'Access-Control-Allow-Origin': ALLOWED_ORIGIN }
+      headers: { 'Access-Control-Allow-Origin': '*' }
     }
     );
   } catch (error) {
@@ -48,7 +46,7 @@ export async function POST(req: Request) {
     return Response.json({ error: 'Failed to sign payload' },
       {
         status: 500,
-        headers: { 'Access-Control-Allow-Origin': ALLOWED_ORIGIN }
+        headers: { 'Access-Control-Allow-Origin': '*' }
       }
     );
   }

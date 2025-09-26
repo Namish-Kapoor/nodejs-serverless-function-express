@@ -1,18 +1,22 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node'
+const ALLOWED_ORIGIN =
+  process.env.NODE_ENV === 'production'
+    ? '*'
+    : '*';
 
-export default function handler(req: VercelRequest, res: VercelResponse) {
-  // Set CORS headers
-  res.setHeader('Access-Control-Allow-Origin', '*')
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS')
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
+export async function OPTIONS() {
+  return new Response(null, {
+    status: 200,
+    headers: {
+      'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+      'Access-Control-Allow-Credentials': 'true',
+    },
+  });
+}
 
-  // Handle OPTIONS request for CORS preflight
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end()
-  }
-
-  const { name = 'World' } = req.query
-  return res.json({
-    message: `Hello ${name}!`,
-  })
+export async function GET() {
+  return Response.json({ ok: true }, {
+    headers: { 'Access-Control-Allow-Origin': ALLOWED_ORIGIN },
+  });
 }

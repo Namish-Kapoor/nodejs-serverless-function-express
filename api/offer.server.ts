@@ -17,7 +17,7 @@ export type Offer = {
     product: {
         title: string;
         handle: string;
-        featuredMedia: {
+        featuredMedia: null | {
             preview: {
                 image: {
                     url: string;
